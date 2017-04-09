@@ -492,71 +492,145 @@ function readURL(input ,id) {
     });
 
 /*----------------------------------- Pick PostType JS  --------------------------------------------------*/
-    $("select[name='postTypeSelect']").change(function() {
-        var postType = $(this).find(':selected').text();
-        var postTypeValue = $(this).val();
-        if(postTypeValue !='none'){
-            $.get(dirUrl+'/includes/ajax/Ads/pickCategory.php?action=post-select&type='+postTypeValue, function(html){
-                var result=JSON.parse(html);
-                if(result.status==="success"){
-                    /* Show Selected Option*/
-                    $( "ul.selected-option" ).append(( $( "ul" ).has( "li.postType" ).length ? $("li.postType").html(postType) : "<li class='postType'>"+postType+"</li>"));
-                    $('ul.selected-option li:not(.postType)').remove();
+function getRequest(url, type, typeName, typeValue, beforeSend) {
+    beforeSend();
+     $.get(url, function(html){
+        var result=JSON.parse(html);
+        if(type=="postType"){
+            var postType=typeName;
+            var postTypeValue=typeValue;
+            if(result.status==="success"){
+                /* Show Selected Option*/
+                $( "ul.selected-option" ).append(( $( "ul" ).has( "li.postType" ).length ? $("li.postType").html(postType) : "<li class='postType'>"+postType+"</li>"));
+                $('ul.selected-option li:not(.postType)').remove();
 
-                    /*Display Category*/
-                    if($(".catOption").is(":visible")==true || $(".subcatOption").is(":visible")==true|| $(".subcatOption2").is(":visible")==true )
-                            $(".catOption, .subcatOption,.subcatOption2").css('display','none');
-                    if(result.returnOption!=""){
-                        $("select[name='categorySelect']").html(result.returnOption);
-                        $(".catOption").css('display','block');
-                    }
-                   
-                    localStorage.setItem('taxName', result.taxName);
-                    /*Update href Value*/
-                    $( '#proceed' ).attr( 'href', function(index, value) {
-                        value = getPathFromUrl(value,'?');                        
-                        return value + '?posttype='+postTypeValue;
-                    });
+                /*Display Category*/
+                if($(".catOption").is(":visible")==true || $(".subcatOption").is(":visible")==true|| $(".subcatOption2").is(":visible")==true )
+                        $(".catOption, .subcatOption,.subcatOption2").css('display','none');
+                if(result.returnOption!=""){
+                    $("select[name='categorySelect']").html(result.returnOption);
+                    $(".catOption").css('display','block');
                 }
-            });
+                else{
+                    $("#proceed").removeClass('disabled');
+                }
+                localStorage.setItem('taxName', result.taxName);
+                /*Update href Value*/
+                $( '#proceed' ).attr( 'href', function(index, value) {
+                    value = getPathFromUrl(value,'?');                        
+                    return value + '?posttype='+postTypeValue;
+                });
+                $('#loader').hide();
+            }
+        }
+        else if(type=="category"){
+            var category=typeName;
+            var categoryValue=typeValue;
+            if(result.status==="success"){
+                /* Show Selected Option*/
+                $( "ul.selected-option" ).append(( $( "ul" ).has( "li.category" ).length ? $("li.category").html(category) : "<li class='category'>"+category+"</li>"));
+                $('ul.selected-option li:not(.category,.postType)').remove();
+                /*Display Category*/
+                $("#proceed").addClass('disabled');
+                if($(".subcatOption").is(":visible")==true || $(".subcatOption2").is(":visible")==true ){
+                    $(".subcatOption,.subcatOption2").css('display','none');
+                    
+                }
+                if(result.returnOption!=""){
+                    $("select[name='subcategorySelect']").html(result.returnOption);
+                    $(".subcatOption").css('display','block');
+                }
+                else{
+                    $("#proceed").removeClass('disabled');
+                }
+                /*Update href Value*/
+                $( '#proceed' ).attr( 'href', function(index, value) {
+                    value = getPathFromUrl(value,'&cat');                        
+                    return value + '&cat='+categoryValue;
+                });
+                $('#loader').hide();
+            }
+        }
+        else if(type=="subcategory"){
+            var subcategory=typeName;
+            var subcategoryValue=typeValue;
+            if(result.status==="success"){
+                /* Show Selected Option*/
+                $( "ul.selected-option" ).append(( $( "ul" ).has( "li.subcategory" ).length ? $("li.subcategory").html(subcategory) : "<li class='subcategory'>"+subcategory+"</li>"));
+                $('ul.selected-option li:not(.category,.postType,.subcategory)').remove();
+                /*Display Category*/
+                $("#proceed").addClass('disabled');
+                if($(".subcatOption2").is(":visible")==true ){
+                    $(".subcatOption2").css('display','none');
+                    
+                }
+                if(result.returnOption!=""){
+                    $("select[name='subcategory2Select']").html(result.returnOption);
+                    $(".subcatOption2").css('display','block');
+                }
+                else{
+                    $("#proceed").removeClass('disabled');
+                }
+                /*Update href Value*/
+                $( '#proceed' ).attr( 'href', function(index, value) {
+                    value = getPathFromUrl(value,'&subcat');                        
+                    return value + '&subcat='+subcategoryValue;
+                });
+                $('#loader').hide();
+            }
         }
         else{
-            $(".catOption, .subcatOption").css('display','none');
-            $( "ul.selected-option" ).html('');
+            var subcategory2=typeName;
+            var subcategoryValue2=typeValue;
+            if(result.status==="success"){
+                /* Show Selected Option*/
+                $( "ul.selected-option" ).append(( $( "ul" ).has( "li.subcategory2" ).length ? $("li.subcategory2").html(subcategory2) : "<li class='subcategory2'>"+subcategory2+"</li>"));
+
+                /*Display Category*/
+                $("#proceed").addClass('disabled');
+                // if($(".subcatOption2").is(":visible")==true ){
+                //     $(".subcatOption2").css('display','none');
+                    
+                // }
+                // if(result.returnOption!=""){
+                //     $("select[name='subcategory2Select']").html(result.returnOption);
+                //     $(".subcatOption2").css('display','block');
+                // }
+                // else{
+                    $("#proceed").removeClass('disabled');
+                //}
+                /*Update href Value*/
+                $( '#proceed' ).attr( 'href', function(index, value) {
+                    value = getPathFromUrl(value,'&subcat1');                        
+                    return value + '&subcat1='+subcategoryValue2;
+                });
+                $('#loader').hide();
+            } 
         }
-    });
+     });
+}
+$("select[name='postTypeSelect']").change(function() {
+    var postType = $(this).find(':selected').text();
+    var postTypeValue = $(this).val();
+    if(postTypeValue !='none'){
+        getRequest(dirUrl+'/includes/ajax/Ads/pickCategory.php?action=post-select&type='+postTypeValue, 'postType',postType,postTypeValue, function() {
+            $('#loader').show();
+        });           
+    }
+    else{
+        $(".catOption, .subcatOption").css('display','none');
+        $( "ul.selected-option" ).html('');
+    }
+});
 /*----------------------------------- Pick Category JS  --------------------------------------------------*/
     $("select[name='categorySelect']").change(function() {
         var category = $(this).find(':selected').text();
         var categoryValue = $(this).val();
         if(category !='none'){
             var taxName=localStorage.getItem('taxName');
-            $.get(dirUrl+'/includes/ajax/Ads/pickCategory.php?action=cat-select&type='+categoryValue+'&taxName='+taxName, function(html){
-                var result=JSON.parse(html);
-                if(result.status==="success"){
-                    /* Show Selected Option*/
-                    $( "ul.selected-option" ).append(( $( "ul" ).has( "li.category" ).length ? $("li.category").html(category) : "<li class='category'>"+category+"</li>"));
-                    $('ul.selected-option li:not(.category,.postType)').remove();
-                    /*Display Category*/
-                    $("#proceed").addClass('disabled');
-                    if($(".subcatOption").is(":visible")==true || $(".subcatOption2").is(":visible")==true ){
-                        $(".subcatOption,.subcatOption2").css('display','none');
-                        
-                    }
-                    if(result.returnOption!=""){
-                        $("select[name='subcategorySelect']").html(result.returnOption);
-                        $(".subcatOption").css('display','block');
-                    }
-                    else{
-                        $("#proceed").removeClass('disabled');
-                    }
-                    /*Update href Value*/
-                    $( '#proceed' ).attr( 'href', function(index, value) {
-                        value = getPathFromUrl(value,'&cat');                        
-                        return value + '&cat='+categoryValue;
-                    });
-                }
-            });
+            getRequest(dirUrl+'/includes/ajax/Ads/pickCategory.php?action=cat-select&type='+categoryValue+'&taxName='+taxName, 'category',category,categoryValue, function() {
+                $('#loader').show();
+            });           
         }
     });
 /*----------------------------------- Pick Sub Category JS  --------------------------------------------------*/
@@ -565,32 +639,9 @@ function readURL(input ,id) {
         var subcategoryValue = $(this).val();
         if(subcategory !='none'){
             var taxName=localStorage.getItem('taxName');
-            $.get(dirUrl+'/includes/ajax/Ads/pickCategory.php?action=cat-select&type='+subcategoryValue+'&taxName='+taxName, function(html){
-                var result=JSON.parse(html);
-                if(result.status==="success"){
-                    /* Show Selected Option*/
-                    $( "ul.selected-option" ).append(( $( "ul" ).has( "li.subcategory" ).length ? $("li.subcategory").html(subcategory) : "<li class='subcategory'>"+subcategory+"</li>"));
-                    $('ul.selected-option li:not(.category,.postType,.subcategory)').remove();
-                    /*Display Category*/
-                    $("#proceed").addClass('disabled');
-                    if($(".subcatOption2").is(":visible")==true ){
-                        $(".subcatOption2").css('display','none');
-                        
-                    }
-                    if(result.returnOption!=""){
-                        $("select[name='subcategory2Select']").html(result.returnOption);
-                        $(".subcatOption2").css('display','block');
-                    }
-                    else{
-                        $("#proceed").removeClass('disabled');
-                    }
-                    /*Update href Value*/
-                    $( '#proceed' ).attr( 'href', function(index, value) {
-                        value = getPathFromUrl(value,'&subcat');                        
-                        return value + '&subcat='+subcategoryValue;
-                    });
-                }
-            });
+            getRequest(dirUrl+'/includes/ajax/Ads/pickCategory.php?action=cat-select&type='+subcategoryValue+'&taxName='+taxName, 'subcategory',subcategory,subcategoryValue, function() {
+                $('#loader').show();
+            });          
         }
     });
     /*----------------------------------- Pick Sub Category JS  --------------------------------------------------*/
@@ -599,32 +650,9 @@ function readURL(input ,id) {
         var subcategoryValue2 = $(this).val();
         if(subcategory2 !='none'){
             var taxName=localStorage.getItem('taxName');
-            $.get(dirUrl+'/includes/ajax/Ads/pickCategory.php?action=cat-select&type='+subcategoryValue2+'&taxName='+taxName, function(html){
-                var result=JSON.parse(html);
-                if(result.status==="success"){
-                    /* Show Selected Option*/
-                    $( "ul.selected-option" ).append(( $( "ul" ).has( "li.subcategory3" ).length ? $("li.subcategory3").html(subcategory2) : "<li class='subcategory3'>"+subcategory2+"</li>"));
-
-                    /*Display Category*/
-                    $("#proceed").addClass('disabled');
-                    // if($(".subcatOption2").is(":visible")==true ){
-                    //     $(".subcatOption2").css('display','none');
-                        
-                    // }
-                    // if(result.returnOption!=""){
-                    //     $("select[name='subcategory2Select']").html(result.returnOption);
-                    //     $(".subcatOption2").css('display','block');
-                    // }
-                    // else{
-                        $("#proceed").removeClass('disabled');
-                    //}
-                    /*Update href Value*/
-                    $( '#proceed' ).attr( 'href', function(index, value) {
-                        value = getPathFromUrl(value,'&subcat1');                        
-                        return value + '&subcat1='+subcategoryValue;
-                    });
-                }
-            });
+            getRequest(dirUrl+'/includes/ajax/Ads/pickCategory.php?action=cat-select&type='+subcategoryValue2+'&taxName='+taxName, 'subcategory2',subcategory2,subcategoryValue2, function() {
+                $('#loader').show();                
+            });             
         }
     });
 

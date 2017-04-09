@@ -10,7 +10,7 @@ get_template_part( 'template-parts/template-part', 'head' );
 $args = array(
    'public'   => true,
    '_builtin' => false
-);
+   );
 
 $output = 'names'; // names or objects, note names is the default
 $operator = 'and'; // 'and' or 'or'
@@ -41,9 +41,8 @@ if($post_types){?>
    </div>
    <ul class="selected-option">
    </ul>
+   <div id="loader" style="display:none;"><img src="<?php bloginfo('template_url');?>/assets/img/loading.gif"></div>
    <a href="<?php echo home_url();?>" name="proceed" id="proceed" class="proceed-btn disabled"><?php _e('Proceed','sale-my-gadget');?></a>
 <?php   
 }
-?>
-<?php 
 get_footer();?>
