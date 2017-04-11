@@ -19,19 +19,17 @@ switch($action){
 			}
 			$catoption.='</optgroup>';
 		}			
-		echo json_encode(array('status'=>'success','taxName'=>$taxName,'returnOption'=>$catoption));
+		echo json_encode(array('status'=>'success','returnOption'=>$catoption));
 	break;
 	case 'cat-select':
 		$termID=$_GET['type'];
-		$taxName=$_GET['taxName'];
 		$subcatoption='';
-		if(!empty($termID) && !empty($taxName)){
-			//$term_childrens = get_term_children($termID, $taxName); 
+		if(!empty($termID)){
+			$term = get_term($termID); 
+			$taxName=$term->taxonomy;
 			$term_childrens = get_terms( $taxName,array( 'parent' => $termID,'hide_empty' => false ) );
-			if ( ! empty( $term_childrens ) && ! is_wp_error( $term_childrens ) ){
-				
+			if ( ! empty( $term_childrens ) && ! is_wp_error( $term_childrens ) ){				
 				foreach ( $term_childrens as $term_child ) {
-					//$term = get_term_by( 'id', $term_child, $taxName );
 					$subcatoption.='<option value="'.$term_child->term_id.'">' . $term_child->name . '</option>';
 				}
 			}

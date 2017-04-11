@@ -514,7 +514,6 @@ function getRequest(url, type, typeName, typeValue, beforeSend) {
                 else{
                     $("#proceed").removeClass('disabled');
                 }
-                localStorage.setItem('taxName', result.taxName);
                 /*Update href Value*/
                 $( '#proceed' ).attr( 'href', function(index, value) {
                     value = getPathFromUrl(value,'?');                        
@@ -543,10 +542,11 @@ function getRequest(url, type, typeName, typeValue, beforeSend) {
                 else{
                     $("#proceed").removeClass('disabled');
                 }
+                localStorage.setItem('taxName',result.taxName);
                 /*Update href Value*/
                 $( '#proceed' ).attr( 'href', function(index, value) {
-                    value = getPathFromUrl(value,'&cat');                        
-                    return value + '&cat='+categoryValue;
+                    value = getPathFromUrl(value,'&taxName');                        
+                    return value + '&taxName='+result.taxName+'&cat='+categoryValue;
                 });
                 $('#loader').hide();
             }
@@ -629,8 +629,7 @@ $("select[name='postTypeSelect']").change(function() {
         var category = $(this).find(':selected').text();
         var categoryValue = $(this).val();
         if(category !='none'){
-            var taxName=localStorage.getItem('taxName');
-            getRequest(dirUrl+'/includes/ajax/Ads/pickCategory.php?action=cat-select&type='+categoryValue+'&taxName='+taxName, 'category',category,categoryValue, function() {
+            getRequest(dirUrl+'/includes/ajax/Ads/pickCategory.php?action=cat-select&type='+categoryValue, 'category',category,categoryValue, function() {
                 $('#loader').show();
             });           
         }
@@ -658,25 +657,51 @@ $("select[name='postTypeSelect']").change(function() {
         }
     });
     /*----------------------------------- Post Ads JS  --------------------------------------------------*/
+
+    /*
+    * Check if user entered title already exists
+    */
+  
+    $('#AdTitle').bind('blur', function () {
+        function getRequest(url, beforeSend) {
+             beforeSend();
+             $.get(url, function(response){
+                 if(response !== '0'){
+                      $(".AdtitleMessage").html(response+ 'Post(s)');
+                  }
+                  else{
+                      $(".AdtitleMessage").html('Unique Post');
+                  }
+             });
+        }
+        getRequest(dirUrl+'/includes/ajax/Ads/titleCount.php?title='+$('#AdTitle').val()+'&posttype='+$('#AdpostType').val(), function() {
+            $(".AdtitleMessage").html('Loading...');
+            $(".AdtitleMessage").show();
+        });
+
+    });
+    /*
+    * Validate Post Ad Form and Ajax Submit
+    */
     $("#postAd").validate({
         errorElement: "span",
-        errorClass: 'col s12 alert',
+        errorClass: 'error',
         rules: {
-            title:{
+            Adtitle:{
                 required:true,
             },
-            description:{
+            Addescription:{
                 required:true,
             },AditemImage:{
                 required:true,
             }
         },
         messages: {
-             title:
+            Adtitle:
             {
                 required:"Title is required",
             },
-            description:{
+            Addescription:{
                 required:"Please write some description about your item.",
             },AditemImage:{
                 required:"Please upload image.",
@@ -688,8 +713,9 @@ $("select[name='postTypeSelect']").change(function() {
             var AditemImage=$("#AditemImage").get(0).files[0];
             var formData = new FormData();
             formData.append('AditemImage', AditemImage);
-            formData.append('title', $("#title").val());
-            formData.append('description', $("#description").val());
+            formData.append('title', $("#Adtitle").val());
+            formData.append('description', $("#dAdescription").val());
+            formData.append('queryString', $("#queryString").val());
             formData.append('action','postAd');
             $.ajax({
                 url: dirUrl+'/includes/ajax/postAd.php',

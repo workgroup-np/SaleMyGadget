@@ -33,7 +33,7 @@ if ( !function_exists( 'sale_my_gadget_mobile_custom_init' ) ) :
         'has_archive' => true,
         'hierarchical' => false,
         'menu_position' => null,
-        'supports' => array( 'title','editor' ),
+        'supports' => array( 'title','editor','thumbnail' ),
         'menu_icon'   => 'dashicons-smartphone',
         );
       register_post_type('mobile',$args);
