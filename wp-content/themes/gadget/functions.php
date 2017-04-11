@@ -126,8 +126,8 @@ add_action( 'wp_enqueue_scripts', 'sale_my_gadget_theme_stylesheets' );
 function sale_my_gadget_theme_js() {
 	wp_enqueue_script( 'bootstrap', get_template_directory_uri() . '/assets/js/bootstrap.js', array( 'jquery' ), '3.3.4' );
 	wp_enqueue_script( 'sale-my-gadget-validate-js', get_template_directory_uri() . '/assets/js/jquery.validate.min.js', array( 'jquery' ), '' );
-	// wp_enqueue_script( 'sale-my-gadget-map-js', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC5oDlm-3nj6DZDyapBVSRody71Ix42C8M&libraries=places', array( 'jquery' ), '' );
-	// wp_enqueue_script( 'sale-my-gadget-captcha-js', 'https://www.google.com/recaptcha/api.js', array( 'jquery' ), '' );
+	wp_enqueue_script( 'sale-my-gadget-map-js', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC5oDlm-3nj6DZDyapBVSRody71Ix42C8M&libraries=places', array( 'jquery' ), '' );
+	wp_enqueue_script( 'sale-my-gadget-captcha-js', 'https://www.google.com/recaptcha/api.js', array( 'jquery' ), '' );
 	//wp_enqueue_script( 'sale-my-gadget-facebook-js', get_template_directory_uri() . '/assets/js/facebook-sdk.js', array( 'jquery' ), '' );
 	wp_enqueue_script( 'sale-my-gadget-theme-js', get_template_directory_uri() . '/assets/js/customscript.js', array( 'jquery' ), '1.0.2' );
 	wp_localize_script( 'sale-my-gadget-theme-js', 'objectL10n', array(
@@ -482,12 +482,13 @@ if ( !function_exists( 'sale_my_gadget_entry_publisher' ) ) {
 add_filter('authenticate', 'sale_my_gadget_allow_email_login', 20, 3);
 function sale_my_gadget_allow_email_login( $user, $username, $password ) {
 	$user = get_user_by( 'login', $username );
-	if ( $user )
+	if ( $user ){
 		$username = $user->user_login;
-	$userStatus = $user->user_status;
-	if($userStatus == 0){
-		$pass = wp_authenticate_username_password(null, $username, $password );
-		return $pass;
+		$userStatus = $user->user_status;
+		if($userStatus == 0){
+			$pass = wp_authenticate_username_password(null, $username, $password );
+			return $pass;
+		}
 	}
 }
 

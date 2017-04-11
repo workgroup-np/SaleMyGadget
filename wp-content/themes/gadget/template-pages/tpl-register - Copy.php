@@ -4,13 +4,8 @@ Template Name: Register
  */
 get_header();
 get_template_part( 'template-parts/template-part', 'head' );
-$current_user = wp_get_current_user();
-$userid=$current_user->ID;
-$profile_image=get_bloginfo('template_url').'/assets/img/profile-icon.png';
-if(get_user_meta( $userid, 'cupp_upload_meta',true))
-   $profile_image=get_user_meta( $userid, 'cupp_upload_meta',true);
 ?>
-<form  enctype="multipart/form-data"  class="general-form register-frame" action="#" method="POST" name="registration_form" id="registration_form">
+<form enctype="multipart/form-data" class="general-form register-frame js-scroll-section" action="" method="POST" name="registration_form" id="registration_form">
 	<div class="container">
 		<div class="row">
      <!--  <div class="facebook-block text-center"> 
@@ -46,7 +41,7 @@ if(get_user_meta( $userid, 'cupp_upload_meta',true))
 						<span class="size-limit">
 							<?php esc_html_e( 'Profile Picture (size less than 2mb)','sale-my-gadget');?>
 						</span>
-						<img src="<?php echo esc_url($profile_image);?>" alt="Profile Image" id="pp_image" width="32" height="32" >
+						<img src="<?php echo esc_url($profile_image);?>" alt="Profile Image" id="pp_image">
 					</div>
 				</div>
 				<div class="col-xs-12 col-sm-6">

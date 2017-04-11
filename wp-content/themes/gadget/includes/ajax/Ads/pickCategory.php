@@ -6,16 +6,20 @@ switch($action){
 	case 'post-select':
 		$post=$_GET['type'];
 		$catoption='';
-		if($post=="computer"){
-			$terms = get_terms( 'computer_cat',array( 'parent' => 0,'hide_empty' => false ) );
+		$taxonomies = get_object_taxonomies( $post, 'object' );
+		foreach($taxonomies as $tax){
+		  	$catoption.='<optgroup label="'.$tax->labels->singular_name.'">';
+			$taxName=$tax->name;
+		  	$terms = get_terms( $taxName,array( 'parent' => 0,'hide_empty' => false ) );
 			if ( ! empty( $terms ) && ! is_wp_error( $terms ) ){
 				
 				foreach ( $terms as $term ) {
 					$catoption.='<option value="'.$term->term_id.'">' . $term->name . '</option>';
 				}
 			}
-		}
-		echo json_encode(array('status'=>'success','taxName'=>'computer_cat','returnOption'=>$catoption));
+			$catoption.='</optgroup>';
+		}			
+		echo json_encode(array('status'=>'success','taxName'=>$taxName,'returnOption'=>$catoption));
 	break;
 	case 'cat-select':
 		$termID=$_GET['type'];

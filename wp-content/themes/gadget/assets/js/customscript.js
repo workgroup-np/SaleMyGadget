@@ -246,17 +246,17 @@ function readURL(input ,id) {
     },
     messages:{
         fname:{
-            require:"Please fill in this field",
+            required:"Please fill in this field",
         },
         lname:{
-            require:"Please fill in this field",
+            required:"Please fill in this field",
         },
         username:{
-            require:"Please fill in this field",
+            required:"Please fill in this field",
             remote:"Email Already exist"
         },
         email:{
-            require:"Please fill in this field",
+            required:"Please fill in this field",
             email:"Please enter valid email",
             remote:"Email Already exist"
         },
@@ -265,14 +265,14 @@ function readURL(input ,id) {
         },
         password:
         {
-            require:"Please fill in this field",
+            required:"Please fill in this field",
         },
         cpassword:{
-            require:"Please fill in this field",
+            required:"Please fill in this field",
         }, address:{
-            require:"Please fill in this field",
+            required:"Please fill in this field",
         },city:{
-            require:"Please fill in this field",
+            required:"Please fill in this field",
         },
         profile_image:{
             required:"Profile Image please",
@@ -448,7 +448,7 @@ function readURL(input ,id) {
         errorElement: "span",
         errorClass: 'col s12 error-label',
         rules: {
-             password:{
+            password:{
                 required:true,
             },
             cpassword:{
@@ -459,10 +459,10 @@ function readURL(input ,id) {
         messages: {
              password:
             {
-                require:"Please fill in this field",
+                required:"Please fill in this field",
             },
             cpassword:{
-                require:"Please fill in this field",
+                required:"Please fill in this field",
             },
         },
         errorPlacement: function (error, element) {
@@ -491,10 +491,10 @@ function readURL(input ,id) {
         }
     });
 
-/*----------------------------------- Pick PostType JS  --------------------------------------------------*/
+/*----------------------------------- Generic Fuction for Ajax Category --------------------------------------------------*/
 function getRequest(url, type, typeName, typeValue, beforeSend) {
     beforeSend();
-     $.get(url, function(html){
+    $.get(url, function(html){
         var result=JSON.parse(html);
         if(type=="postType"){
             var postType=typeName;
@@ -607,8 +607,10 @@ function getRequest(url, type, typeName, typeValue, beforeSend) {
                 $('#loader').hide();
             } 
         }
-     });
+    });
 }
+
+/*----------------------------------- Pick PostType JS  --------------------------------------------------*/
 $("select[name='postTypeSelect']").change(function() {
     var postType = $(this).find(':selected').text();
     var postTypeValue = $(this).val();
@@ -653,6 +655,80 @@ $("select[name='postTypeSelect']").change(function() {
             getRequest(dirUrl+'/includes/ajax/Ads/pickCategory.php?action=cat-select&type='+subcategoryValue2+'&taxName='+taxName, 'subcategory2',subcategory2,subcategoryValue2, function() {
                 $('#loader').show();                
             });             
+        }
+    });
+    /*----------------------------------- Post Ads JS  --------------------------------------------------*/
+    $("#postAd").validate({
+        errorElement: "span",
+        errorClass: 'col s12 alert',
+        rules: {
+            title:{
+                required:true,
+            },
+            description:{
+                required:true,
+            },AditemImage:{
+                required:true,
+            }
+        },
+        messages: {
+             title:
+            {
+                required:"Title is required",
+            },
+            description:{
+                required:"Please write some description about your item.",
+            },AditemImage:{
+                required:"Please upload image.",
+            },
+        },
+
+        submitHandler:function(form){
+            var registrationFormValue = $('#postAd').serialize();
+            var AditemImage=$("#AditemImage").get(0).files[0];
+            var formData = new FormData();
+            formData.append('AditemImage', AditemImage);
+            formData.append('title', $("#title").val());
+            formData.append('description', $("#description").val());
+            formData.append('action','postAd');
+            $.ajax({
+                url: dirUrl+'/includes/ajax/postAd.php',
+                type: 'POST',
+                data:formData,
+                contentType: false,
+                processData: false,
+                beforeSend:function()
+                    {
+                        //$('#registerSubmit').css('pointer-events','none');
+                        $('#loader').show();
+                    }
+                })
+            .done(function(msg) {
+                msg = JSON.parse(msg);
+                if(msg.msg==='success')
+                {
+                    $('.success_message').removeClass('redzone');
+                    $('.success_message').html("Your Ad has been submitted");
+                    $('.success_message').show();
+                    document.getElementById("registration_form").reset();
+                }
+                else
+                {
+                    $('.success_message').addClass('redzone');
+                    $('.success_message.redzone').html("Ad couldnot be submitted");
+                }
+                $('#loader').html('');
+                $('#loader').hide();
+               // $('#registerSubmit').css('pointer-events','auto');
+               return false;
+           })
+            .fail(function() {
+                console.log("error");
+            })
+            .always(function() {
+                console.log("complete");
+            });
+
         }
     });
 

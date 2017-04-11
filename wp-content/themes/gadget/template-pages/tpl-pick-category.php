@@ -42,7 +42,7 @@ if($post_types){?>
    <ul class="selected-option">
    </ul>
    <div id="loader" style="display:none;"><img src="<?php bloginfo('template_url');?>/assets/img/loading.gif"></div>
-   <a href="<?php echo home_url();?>" name="proceed" id="proceed" class="proceed-btn disabled"><?php _e('Proceed','sale-my-gadget');?></a>
+   <a href="<?php echo home_url('/post-ads');?>" name="proceed" id="proceed" class="proceed-btn disabled"><?php _e('Proceed','sale-my-gadget');?></a>
 <?php   
 }
 get_footer();?>

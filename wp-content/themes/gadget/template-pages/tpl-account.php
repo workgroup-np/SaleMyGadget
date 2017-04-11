@@ -19,7 +19,7 @@ if(is_user_logged_in())
 						<a href="<?php echo home_url('/wp-admin/');?>" class="btn btn-default"><?php esc_html_e( 'View my dashboard','sale-my-gadget');?></a>
 					</li>
 					<li>
-						<a href="<?php echo home_url('/wp-admin/');?>" class="btn btn-default"><?php esc_html_e( 'Post Ads','sale-my-gadget');?></a>
+						<a href="<?php echo home_url('/pick-category/');?>" class="btn btn-default"><?php esc_html_e( 'Post Ads','sale-my-gadget');?></a>
 					</li>
 					<li>
 						<a href="<?php echo home_url('/logout/');?>" class="btn btn-default"><?php esc_html_e( 'Logout','sale-my-gadget');?></a>

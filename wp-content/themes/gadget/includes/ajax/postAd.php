@@ -1,52 +1,54 @@
 <?php 
-if("registrationForm"==$_POST['action']):
+if("postAd"==$_POST['action']):
 	include '../../../../../wp-load.php';
+var_dump($_POST);die(); 	
 	//include '../../../../../mail-function.php';
 	global $wpdb;
 		$type = $_POST['type'];
 		$upload_overrides = array( 'test_form' => false );
-		$profileImageFiles = $_FILES['profile_image'];
+		$profileImageFiles = $_FILES['postAd'];
 		$profileImageFilesSize =ceil($profileImageFiles['size']/1048576);
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
-		$profile_image_files = array(
+		$postAd_files = array(
 		      'name'     => $profileImageFiles['name'],
 		      'type'     => $profileImageFiles['type'],
 		      'tmp_name' => $profileImageFiles['tmp_name'],
 		      'error'    => $profileImageFiles['error'],
 		      'size'     => $profileImageFiles['size']
 		    );
-		$profileIamgeFilesMove = wp_handle_upload( $profile_image_files, $upload_overrides );
-	$fname =sanitize_text_field($_POST['fname']);
-	$lname =sanitize_text_field($_POST['lname']);
-	$email =sanitize_email($_POST['email']);
-	$username =sanitize_text_field($_POST['username']);
-	$mobile = sanitize_text_field($_POST['mobile']);
-	$address = sanitize_text_field($_POST['address']);
-	$city = sanitize_text_field($_POST['city']);
-	if ( username_exists( $username ) ){				
-		$error = 'Username is already registered';
-	}if ( email_exists($_POST['email']) ){
-		$error = 'Email is already registered';
-	}
-	if (!$error){
-		$userdata = array(
-			'user_login' => esc_attr( $username ),
-			'first_name' => esc_attr( $fname ),
-			'last_name' => esc_attr( $lname ),
-			'user_email' => esc_attr( $email ),
-			'role' => 'author',
-			'user_pass'   =>  $_POST['password']
+		$profileIamgeFilesMove = wp_handle_upload( $postAd_files, $upload_overrides );
+		$url = sanitize_text_field($_POST['queryString']);
+		$title = sanitize_text_field($_POST['title']);
+		$description = wp_kses_post($_POST['description']);
+
+		$parts = parse_url($url);
+		parse_str($parts['path'], $queryString);
+		$my_post = array(
+		  'post_title' => $title,
+		  'post_content' => $description,
+		  'post_type'     => $queryString['postType'],
+		  'post_status'   => 'publish',
 		);
-		/** Create User Activation key */
-	   	$salt = wp_generate_password(20);
-	   	$userActivationkey = sha1($salt . $email . uniqid(time(), true));
-		$user_id = wp_insert_user( $userdata );
-		/** Insert User status as inactive*/
-	    $wpdb->update(
-	    $wpdb->users,
-	    array('user_status' => 1),
-	    array('ID' => $user_id)
-	    );	
+		if($queryString['cat']){
+		    $my_post['tax_input']=array(
+		                    'partner_cat'=>array(
+		                        $queryString['cat']
+		                    )
+		            );
+		}
+		if($queryString['subcat']){
+		    array_push($my_post['tax_input']['partner_cat'],$queryString['subcat']);
+		}if($queryString['subcat1']){
+		    array_push($my_post['tax_input']['partner_cat'],$queryString['subcat1']);
+		}
+		$my_post = array(
+			'post_title' => $title,
+			'post_content' => $description,
+			'post_status' => 'publish',
+			'post_type' => 'computer',
+			'tax_input'=>array('computer_cat'=>$_POST['fish_species_by_water']),
+		);
+		$post_id = wp_insert_post($my_post);
 	    add_user_meta( $user_id, 'userActivation', $userActivationkey);		
 		update_usermeta( $user_id, 'cupp_upload_meta', $profileIamgeFilesMove['url'] );	
 		update_usermeta( $user_id, 'mobile', $_POST['mobile'] );
@@ -72,7 +74,7 @@ if("registrationForm"==$_POST['action']):
 		//$SendNotification = new sendNotification($companyname,$companyurl,$sendersDomain,$CompanyEmail);
 
 		$Subject = 'Sale My Gadget Activation Link';
-		$details['Name'] = strip_tags($fname);
+		$details['Name'] = strip_tags($title);
 		$details['Email'] = $mail_to;
 
 		// $SendNotification->senders_from_name_ = "Sale My Gadget";
@@ -88,5 +90,4 @@ if("registrationForm"==$_POST['action']):
 		$successMessage = array('msg'=>'fail');
 	endif;
 	echo json_encode($successMessage);
-}
 endif;

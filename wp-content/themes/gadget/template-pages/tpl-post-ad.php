@@ -1,292 +1,139 @@
 <?php
 /*
-Template Name: Register
- */
+Template Name: Post Ad
+*/
+if(is_user_logged_in() == false){
+   wp_redirect( home_url('/login/?redirect=submit-photo/'));
+   exit();
+}
 get_header();
 get_template_part( 'template-parts/template-part', 'head' );
-?>
-<form enctype="multipart/form-data" class="general-form register-frame js-scroll-section" action="" method="POST" name="registration_form" id="registration_form">
-	<div class="container">
-		<div class="row">
-     <!--  <div class="facebook-block text-center"> 
-        <a href="javascript:void(0)" onClick="fbLogin()" class="facebook-btn"><span class="icon-facebook"></span><?php esc_html_e( ' Sign in with Facebook','sale-my-gadget');?></a>
-                   <header class="alter-heading"> <span class="text">or</span> </header>
-                 </div> -->
-			<div class="col-xs-12 col-lg-8 col-lg-offset-2">
-				<div class="col-xs-12 col-sm-6">
-					
-					<div class="form-group">
-						<input placeholder="First Name" name="fname" id="fname" type="text" class="form-control">
-					</div>
-					<div class="form-group">
-						<input placeholder="Last Name" name="lname" id="lname" type="text" class="form-control">
-					</div>
-					<div class="form-group">
-						<input placeholder="Email" type="email" id="email" name="email" class="form-control">
-					</div>
-					<div class="form-group">
-						<input placeholder="Username" type="text" id="username" name="username" class="form-control">
-					</div>
-					<div class="form-group">
-						<input placeholder="Password" name="password" id="password" type="password" class="form-control">
-					</div>
-					<div class="form-group">
-						<input placeholder="Confirm Password" name="cpassword" id="cpassword" type="password" class="form-control">
-					</div>
-					<div class="form-group employee-field">
-						<input placeholder="Mobile" name="mobile" id="mobile" type="text" class="form-control">
-					</div>					
-					<div class="form-group employee-field">
-						<input type="file" name="profile_image" onchange="readURL(this,'#pp_image');" id="profile_image" >
-						<span class="size-limit">
-							<?php esc_html_e( 'Profile Picture (size less than 2mb)','sale-my-gadget');?>
-						</span>
-						<img src="<?php echo esc_url($profile_image);?>" alt="Profile Image" id="pp_image">
-					</div>
-				</div>
-				<div class="col-xs-12 col-sm-6">
-					
-					<div id="locationField" class="form-group">
-						<input id="address" placeholder="Enter your address" onFocus="geolocate()" type="text" class="form-control" name="address"></input>
-					</div>
 
 
-         		<div>
-         			<div class="form-group">
-         				<select class="form-control" name="city" id="city">
-         					<option selected="selected" value="">Choose your city</option>
-
-         					<option value="71">Achham</option>
-
-
-         					<option value="72">Arghakhachi</option>
-
-
-         					<option value="73">Baglung</option>
-
-
-         					<option value="74">Baitadi</option>
-
-
-         					<option value="75">Bajura</option>
-
-
-         					<option value="95">Banepa</option>
-
-
-         					<option value="76">Banke</option>
-
-
-         					<option value="77">Bara</option>
-
-
-         					<option value="78">Bardiya</option>
-
-
-         					<option value="70">Bhaktapur</option>
-
-
-         					<option value="79">Bhojpur</option>
-
-
-         					<option value="80">Chitwan</option>
-
-
-         					<option value="81">Dadeldhura</option>
-
-
-         					<option value="82">Dailekh</option>
-
-
-         					<option value="24">Dang</option>
-
-
-         					<option value="83">Darchula</option>
-
-
-         					<option value="26">Dhading</option>
-
-
-         					<option value="27">Dhankuta</option>
-
-
-         					<option value="28">Dhanusa</option>
-
-
-         					<option value="29">Dolakha</option>
-
-
-         					<option value="84">Dolpa</option>
-
-
-         					<option value="32">Gorkha</option>
-
-
-         					<option value="33">Gulmi</option>
-
-
-         					<option value="96">Hetauda</option>
-
-
-         					<option value="85">Humla</option>
-
-
-         					<option value="35">Illam</option>
-
-
-         					<option value="86">Jajarkot</option>
-
-
-         					<option value="37">Jhapa</option>
-
-
-         					<option value="87">Jumla</option>
-
-
-         					<option value="38">Kailali</option>
-
-
-         					<option value="39">Kanchanpur</option>
-
-
-         					<option value="40">Kapilbastu</option>
-
-
-         					<option value="88">Kaski</option>
-
-
-         					<option value="2">Kathmandu</option>
-
-
-         					<option value="41">Khotang</option>
-
-
-         					<option value="98">Kirtipur</option>
-
-
-         					<option value="42">Lamjung</option>
-
-
-         					<option value="43">Mahottari</option>
-
-
-         					<option value="44">Morang</option>
-
-
-         					<option value="45">Myagdi</option>
-
-
-         					<option value="46">Nawalparasi</option>
-
-
-         					<option value="47">Nuwakot</option>
-
-
-         					<option value="48">Okhaldhunga</option>
-
-
-         					<option value="89">Pachthar</option>
-
-
-         					<option value="49">Palpa</option>
-
-
-         					<option value="50">Parbat</option>
-
-
-         					<option value="51">Parsa</option>
-
-
-         					<option value="97">Patan</option>
-
-
-         					<option value="52">Pyuthan</option>
-
-
-         					<option value="90">Ramechhap</option>
-
-
-         					<option value="91">Rasuwa</option>
-
-
-         					<option value="53">Rautahat</option>
-
-
-         					<option value="54">Rolpa</option>
-
-
-         					<option value="55">Rukum</option>
-
-
-         					<option value="56">Rupandehi</option>
-
-
-         					<option value="57">Salyan</option>
-
-
-         					<option value="92">Salyang</option>
-
-
-         					<option value="58">Sankhuwasabha</option>
-
-
-         					<option value="59">Saptari</option>
-
-
-         					<option value="60">Sarlahi</option>
-
-
-         					<option value="61">Sindhuli</option>
-
-
-         					<option value="93">Sindhulki</option>
-
-
-         					<option value="62">Sindhupalchowk</option>
-
-
-         					<option value="63">Siraha</option>
-
-
-         					<option value="64">Sunsari</option>
-
-
-         					<option value="65">Surkhet</option>
-
-
-         					<option value="66">Syangja</option>
-
-
-         					<option value="67">Tanahu</option>
-
-
-         					<option value="68">Taplejung</option>
-
-
-         					<option value="69">Terathum</option>
-
-
-         					<option value="94">Udaypur</option>
-
-
-         				</select>
-
-         			</div>
-         		</div>			
-         	</div>
-         	<div class="col-xs-12">
-         		<div class="btn-group">
-                  <div class="g-recaptcha" data-sitekey="6LfROxsUAAAAANCsb8tNYtwYtl_RyVAYagAEcXy5" data-callback="recaptchaCallback"></div>
-                  <input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha">
-         			<input type="submit" value="Submit" id="registerSubmit" class="btn btn-default">
-         			<div id="loader"></div>
-         		</div>
-         		<div class="success_message" style="display: none;">
-         		</div>
-         	</div>
+// //exit;
+// $current_user = wp_get_current_user();
+// $current_user_email =$current_user->user_email;
+// $current_display_name = $current_user->display_name;
+// $submitting_error='';
+// $class ='';
+// $message ='';
+// $media_erro =false;
+// if('POST'===$_SERVER['REQUEST_METHOD']):
+
+//    if( isset($_POST['submit_new']) && 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POST['action']=='gallery_submit' && $_POST['title']!='' && $_POST['description']!='' && ($_POST['my_video_upload']!='' || $_POST['my_image_upload_nonce']!=''))
+//    {
+//       echo $video_link = $_POST['my_video_upload'];
+//       if($video_link=='' && $_POST['my_image_upload_nonce']==''){
+//          $media_erro =true;
+//       }
+// //var_dump($_POST);
+//       $my_post = array(
+//          'post_title' => $_POST['title'],
+//          'post_content' => $_POST['description'],
+//          'post_status' => 'draft',
+//          'post_type' => 'gallery',
+//          'tax_input'=>array('species'=>$_POST['fish_species_by_water']),
+//          );
+//       $post_id = wp_insert_post($my_post);
+// //wp_set_post_terms($post_id,array($_POST['fish_species_by_water']),'',true);
+//       update_post_meta($post_id,'fish_species',array($_POST['fish_species_type']));
+//       update_post_meta($post_id,'video_link',$video_link);
+
+//       if (isset( $_POST['my_image_upload_nonce']) && $post_id!='' && wp_verify_nonce( $_POST['my_image_upload_nonce'], 'my_image_upload' ))
+//       {
+//          require_once( ABSPATH . 'wp-admin/includes/image.php' );
+//          require_once( ABSPATH . 'wp-admin/includes/file.php' );
+//          require_once( ABSPATH . 'wp-admin/includes/media.php' );
+//          $attachment_id = media_handle_upload( 'my_image_upload', $post_id );
+
+//          if ( is_wp_error( $attachment_id ) ) {
+// //echo 'error';
+//             $submitting_error=true;
+//             $class ='danger';
+//             $message ='Error while uploading';
+
+//          } else {
+// //$size = 'full';
+// //$image_thumb = wp_get_attachment_image_src( $attachment_id, $size );
+//             set_post_thumbnail( $post_id, $attachment_id );
+//             $submitting_error=false;
+//             $class ='success';
+//             $message ='Successfully uploaded';
+//             unset($_POST);
+//          }
+
+//       }
+//       else
+//       {
+//          $submitting_error=false;
+//          $class ='success';
+//          $message ='Successfully uploaded';
+
+// // The security check failed, maybe show the user an error.
+//       }
+//       $headers = 'From:'.$current_display_name.'<'.$current_user_email.'>'."\r\n";
+//       wp_mail('james@fishnet.com.au,a.shrestha@andmine.com','gallery Submitted','New gallery post has been submitted',$headers);
+//       wp_redirect(home_url('/thank-you/'));
+//    }
+//    else
+//    {
+//       $submitting_error=true;
+//       $class ='danger';
+//       $message ='Error while uploading or no Media uploaded';
+//       unset($_POST);
+//    }
+//    endif;
+   ?>
+   <main id="main">
+      <div class="main-container">
+
+         <div class="frame-holder">
+            <?php //get_sidebar('fishnet_dashboard');?>
+            <div class="container">
+               <div class="form-frontend">
+                  <form action="#" method="POST" enctype="multipart/form-data" class="select-form" name="postAd" id="postAd">
+                     <div class="member_no box">
+                        <legend class="form-subtitle"><?php echo esc_html_e('Enter fields below to submit an your Ad','sale-my-gadget');?></legend>
+                        <div class="row">
+                           <div class="form-group">
+                              <div class="input-holder col-sm-12">
+                                 <input id="title" name="title" type="text" value="<?php echo $title;?>" class="title form-control" placeholder="Title..">
+                              </div>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="form-group">
+                              <div class="input-holder col-sm-12">
+                                 <textarea class="description form-control" id="description" name="description" placeholder="Description.."></textarea>                                 
+                              </div>
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="form-group">
+                              <div class="label-holder col-sm-12">
+                                 <label for="description"><?php _e('Image','sale-my-gadget');?></label>
+                              </div>
+                              <div class="input-holder col-sm-12">
+                                 <input type="file" name="AditemImage" id="AditemImage" class=""  multiple="false" onchange="readURL(this,'#pp_image');"  />
+                                 <img src="<?php echo esc_url(get_bloginfo('template_url').'/assets/img/profile-icon.png');?>" alt="Profile Image" id="pp_image" width="32" height="32" >
+                              </div>
+                           </div>
+                        </div>
+
+                        <div class="btn-holder text-center">
+                           <div id="loader" style="display:none;"><img src="<?php bloginfo('template_url');?>/assets/img/loading.gif"></div>
+                           <input type="text" name="queryString" id="queryString" value="<?php echo esc_attr($_SERVER['QUERY_STRING']);?>">
+                           <input type="submit" id="submit_new" value="Submit" name="submit_new" class="custom-btn block btn" >
+                        </div>
+
+                     </div>
+                     <!--end of non member-->
+                  </form>
+               </div><!-- main form div-->
+            </div><!--container-->
          </div>
-     </div>
- </div>
-</form>
-<?php 
-get_footer();?>
+      </div>
+   </main>
+   <?php
+   get_footer();
+   ?>

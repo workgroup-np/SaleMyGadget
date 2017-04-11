@@ -4,8 +4,8 @@ ob_start();
 include '../../../../../wp-load.php';
 global $wpdb;
 if( 'POST' == $_SERVER['REQUEST_METHOD']) {
-	$username = $wpdb->escape($_REQUEST['username']);
-	$password = $wpdb->escape($_REQUEST['password']);
+	$username = $_REQUEST['username'];
+	$password = $_REQUEST['password'];
 	$userInfo = get_user_by( 'login', $username );
 	if($userInfo==true){
 		$user_meta=get_userdata($userInfo->ID);

@@ -9,7 +9,7 @@
 	}
 	?> 
 	<div class="top-section row">
-		<?php if ( class_exists( 'WooCommerce' ) && get_theme_mod( 'sale_my_gadget_account', 1 ) == 1  || has_nav_menu( 'top_menu' ) || get_theme_mod( 'sale_my_gadget_socials', 0 ) == 1 ) { ?>
+		<?php if (get_theme_mod( 'sale_my_gadget_account', 1 ) == 1  || has_nav_menu( 'top_menu' ) || get_theme_mod( 'sale_my_gadget_socials', 0 ) == 1 ) { ?>
 			<div class="container">
 				<?php // if ( has_nav_menu( 'top_menu' ) ) : ?>
 					<div class="top-infobox-menu col-sm-6">
@@ -42,7 +42,7 @@
 				<?php // endif; ?>
 				<div class="header-login text-right text-left-xs col-sm-6 no-gutter pull-right"> 					
 						<?php if ( is_user_logged_in() ) { ?>
-								<a class="login-link logged-in" href="<?php echo site_url('/wp-admin') ?>" title="<?php esc_attr_e( 'My Account', 'sale-my-gadget' ); ?>"><?php esc_html_e( 'My Account', 'sale-my-gadget' ); ?></a>
+								<a class="login-link logged-in" href="<?php echo site_url('/my-account') ?>" title="<?php esc_attr_e( 'My Account', 'sale-my-gadget' ); ?>"><?php esc_html_e( 'My Account', 'sale-my-gadget' ); ?></a>
 								<a class="login-link logged-in" href="<?php echo site_url('/logout/');?>" class="btn btn-default"><?php esc_html_e( 'Logout', 'sale-my-gadget' ); ?></a>
 						<?php } else { ?>							
 								<a class="login-link logged-out" href="<?php echo site_url('/login') ?>" title="<?php esc_attr_e( 'Login / Register', 'sale-my-gadget' ); ?>"><?php esc_html_e( 'Login / Register', 'sale-my-gadget' ); ?></a>
